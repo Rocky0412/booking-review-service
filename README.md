@@ -25,7 +25,7 @@ A RESTful backend application built with Spring Boot for managing ride bookings 
 - Spring Data JPA
 - Hibernate
 - MySQL
-- Maven
+- Gradle
 - Lombok
 
 ---
