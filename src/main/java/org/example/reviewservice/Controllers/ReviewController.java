@@ -2,6 +2,7 @@ package org.example.reviewservice.Controllers;
 
 import jakarta.websocket.server.PathParam;
 import org.example.reviewservice.RequestDTO.ReviewDTO;
+import org.example.reviewservice.RequestDTO.ReviewEditDTO;
 import org.example.reviewservice.models.Booking;
 import org.example.reviewservice.models.Review;
 import org.example.reviewservice.repositories.BookingRespository;
@@ -75,6 +76,23 @@ public class ReviewController {
         bookingRespository.save(booking);
         reviewRepository.deleteById(review_id);
         return ResponseEntity.ok(review.get());
+    }
+
+    @PatchMapping("/edit/{review_id}")
+    public ResponseEntity<Review> editReview(@RequestBody ReviewEditDTO reviewDTO,
+                                             @PathVariable Long review_id) {
+        Optional<Review> review= reviewRepository.findById(review_id);
+        if (review.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+        Booking booking = bookingRespository.findByReview_id(review_id);
+        Review review1 = review.get();
+        review1.setContent(reviewDTO.getComment());
+        booking.setReview(review1);
+        Review savedReview = reviewRepository.save(review1);
+        bookingRespository.save(booking);
+        return ResponseEntity.ok(savedReview);
+
     }
 
 }
