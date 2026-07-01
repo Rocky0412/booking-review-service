@@ -158,13 +158,13 @@ cd booking-review-service
 Run the application
 
 ```bash
-./mvnw spring-boot:run
+./gradlew bootRun
 ```
 
 or
 
 ```bash
-mvn spring-boot:run
+gradle bootRun
 ```
 
 ---
