@@ -18,6 +18,7 @@ public class Driver extends BaseModel {
     String name;
     String surname;
     String LicenceNumber;
+    private String password;
     @OneToMany(mappedBy = "driver", cascade = {CascadeType.MERGE, CascadeType.PERSIST})
     List<Booking> bookings;
     public void addBooking(Booking booking) {

@@ -21,7 +21,10 @@ public class Passenger extends BaseModel{
      private String lastName;
      private String email;
      private String phoneNumber;
-     @OneToMany(mappedBy = "passenger", fetch = FetchType.LAZY, cascade = {CascadeType.MERGE, CascadeType.PERSIST})
+     private String password;
+
+     @OneToMany(mappedBy = "passenger", fetch = FetchType.LAZY,
+             cascade = {CascadeType.MERGE, CascadeType.PERSIST})
      List<Booking> bookings;
 
 
