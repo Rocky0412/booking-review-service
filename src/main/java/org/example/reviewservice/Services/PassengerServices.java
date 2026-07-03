@@ -71,6 +71,7 @@ public class PassengerServices {
                 .firstName(passengerRequestDTO.getFirstName())
                 .lastName(passengerRequestDTO.getLastName())
                 .phoneNumber(passengerRequestDTO.getPhoneNumber())
+                .password(passengerRequestDTO.getPassword())
                 .build();
         passengerRepository.save(newPassenger);
         return ResponseEntity.status(HttpStatus.CREATED).body(newPassenger);
