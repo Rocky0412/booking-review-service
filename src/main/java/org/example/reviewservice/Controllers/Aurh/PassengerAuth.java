@@ -1,6 +1,8 @@
 package org.example.reviewservice.Controllers.Aurh;
 
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.Getter;
 import org.example.reviewservice.JWTService.JWTUtils;
 import org.example.reviewservice.RequestDTO.PassengerAuthDTO;
@@ -9,7 +11,9 @@ import org.example.reviewservice.Services.PassengerServices;
 import org.example.reviewservice.models.Passenger;
 import org.example.reviewservice.repositories.PassengerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -45,13 +49,32 @@ public class PassengerAuth {
         this.authenticationManager = authenticationManager;
         this.jwtUtils = jwtUtils;
     }
+    @GetMapping("/validate")
+    ResponseEntity<?> validatePassengerAuth(HttpServletRequest request) {
+
+        String token = request.getHeader(HttpHeaders.AUTHORIZATION);
+        Cookie[] cookies = request.getCookies();
+
+        if (cookies != null) {
+            for (Cookie cookie : cookies) {
+                if ("jwt-token".equals(cookie.getName())) {
+                    token = cookie.getValue();
+                    // Validate the JWT here
+                    break;
+                }
+            }
+        }
+        return ResponseEntity.status(HttpStatus.OK).body(token);
+    }
     @PostMapping("/signup/passenger")
     ResponseEntity<Passenger> signIn(@RequestBody PassengerRequestDTO passengerRequestDTO) {
         passengerRequestDTO.setPassword(passwordEncoder.encode(passengerRequestDTO.getPassword()));
         return passengerServices.createPassenger(passengerRequestDTO);
     }
     @GetMapping("/signin/passenger")
-    ResponseEntity<?> login(@RequestBody PassengerAuthDTO passengerAuthDTO, HttpServletRequest request) {
+    ResponseEntity<?> login(@RequestBody PassengerAuthDTO passengerAuthDTO,
+                            HttpServletRequest request,
+                            HttpServletResponse response) {
 
         try {
             Authentication authentication = authenticationManager.authenticate(
@@ -60,18 +83,39 @@ public class PassengerAuth {
                             passengerAuthDTO.getPassword()
                     )
             );
+           if(authentication.isAuthenticated()) {
 
-            Map<String,String> map = new HashMap<>();
+               Map<String,String> map = new HashMap<>();
 
-            UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-            map.put("username", userDetails.getUsername());
-            String JWT_Token= jwtUtils.buildToken(map,userDetails);
+               UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+               map.put("username", userDetails.getUsername());
+               String JWT_Token= jwtUtils.buildToken(map,userDetails);
 
-            System.out.println( "JWT_Token " + JWT_Token);
+               //System.out.println( "JWT_Token " + JWT_Token);
+
+               /* Set Token
+                *
+                *
+                * */
+
+               ResponseCookie cookie = ResponseCookie
+                       .from("jwt-token",JWT_Token)
+                       .httpOnly(true)
+                       .maxAge(3600)
+                       .path("/")
+                       .sameSite("none")
+                       .secure(false)
+                       .build();
+               response.addHeader(HttpHeaders.SET_COOKIE, cookie.toString());
+
+               System.out.println("cookies == " + cookie.toString());
 
 
 
-            return ResponseEntity.ok("Login successful " + JWT_Token);
+               return ResponseEntity.ok("Login successful " + JWT_Token);
+
+           }
+           return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
 
         } catch (BadCredentialsException e) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED)

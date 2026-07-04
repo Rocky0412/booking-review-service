@@ -1,7 +1,8 @@
 package org.example.reviewservice.Configuartion;
 
 
-import Helper.PassengerUserDetailsImp;
+import org.example.reviewservice.Configuartion.Helper.JWTAuthFilter;
+import org.example.reviewservice.Configuartion.Helper.PassengerUserDetailsImp;
 import org.example.reviewservice.repositories.PassengerRepository;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -13,14 +14,11 @@ import org.springframework.security.config.annotation.authentication.configurati
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.provisioning.InMemoryUserDetailsManager;
-import org.springframework.security.web.DefaultSecurityFilterChain;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
 @EnableWebSecurity
@@ -28,20 +26,31 @@ public class SecurityRelatedConfiguartion {
 
 
     final private PassengerRepository passengerRepository;
+    final private JWTAuthFilter jwtAuthFilter;
 
-    SecurityRelatedConfiguartion(PassengerRepository passengerRepository) {
+
+    SecurityRelatedConfiguartion(PassengerRepository passengerRepository, JWTAuthFilter jwtAuthFilter) {
         this.passengerRepository = passengerRepository;
+        this.jwtAuthFilter = jwtAuthFilter;
     }
 
 
     @Bean
 
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+    public SecurityFilterChain securityFilterChain(HttpSecurity http,
+                                                   AuthenticationProvider authenticationProvider) throws Exception {
         http
                 .csrf(AbstractHttpConfigurer::disable)
+                .cors(cors->cors.disable())
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/api/v1/auth/**").permitAll()
-                         .anyRequest().authenticated()).httpBasic(Customizer.withDefaults());
+                        .requestMatchers("/api/v1/auth/validate").authenticated()
+                         .anyRequest().authenticated())
+
+                .authenticationProvider(authenticationProvider)
+                .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
+                  ;
+
 
         return http.build();
     }
@@ -62,7 +71,7 @@ public class SecurityRelatedConfiguartion {
 //        return new InMemoryUserDetailsManager(user);
 //    }
 
-    @Bean
+
     public UserDetailsService userDetailsService() {
         return new PassengerUserDetailsImp(passengerRepository);
     }

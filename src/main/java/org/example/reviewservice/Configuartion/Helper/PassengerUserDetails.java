@@ -1,4 +1,4 @@
-package Helper;
+package org.example.reviewservice.Configuartion.Helper;
 
 import org.example.reviewservice.RequestDTO.PassengerRequestDTO;
 import org.example.reviewservice.models.Passenger;
