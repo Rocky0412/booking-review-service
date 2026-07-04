@@ -27,7 +27,7 @@ public class JWTUtils {
     * Generate Jwt Token
     *
     * */
-    public String buildToken(Map<String, Object> claims, UserDetails userDetails) {
+    public String buildToken(Map<String, String> claims, UserDetails userDetails) {
         return Jwts
                 .builder()
                 .claims(claims)
@@ -37,7 +37,11 @@ public class JWTUtils {
                 .expiration(new Date(System.currentTimeMillis() + expiration))
                 .compact();
     }
-
+    /*
+    *
+    * Parse the  user Id from token
+    *
+    * */
     public String getUsernameFromToken(String token) {
         Claims claims=Jwts
                 .parser()

@@ -48,18 +48,7 @@ public class BasicRunner implements CommandLineRunner {
     @Override
     public void run(String... args) throws Exception {
 
-        UserDetails userDetails = User
-                .builder()
-                .username("Rocky")
-                .password("password")
-                .build();
-        HashMap<String, Object> claims = new HashMap<>();
-        claims.put("role", "USER");
-        claims.put("Token", "ADMIN");
-        String jwt= jwtUtils.buildToken(claims, userDetails);
-        System.out.println("JWT Token: " + jwt);
-        Claims claims1= jwtUtils.parseToken(jwt);
-        System.out.println("JWT Claims: " + claims1);
+
 
 
 
