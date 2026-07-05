@@ -1,3 +1,0 @@
-
-ALTER TABLE driver
-    ADD COLUMN password VARCHAR(255) NOT NULL DEFAULT '';
