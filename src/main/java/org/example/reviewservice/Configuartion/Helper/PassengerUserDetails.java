@@ -1,7 +1,8 @@
 package org.example.reviewservice.Configuartion.Helper;
 
 import org.example.reviewservice.RequestDTO.PassengerRequestDTO;
-import org.example.reviewservice.models.Passenger;
+//import org.example.reviewservice.models.Passenger;
+import org.example.entityservices.models.Passenger;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 

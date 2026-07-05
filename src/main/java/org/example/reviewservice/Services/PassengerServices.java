@@ -2,8 +2,10 @@ package org.example.reviewservice.Services;
 
 import org.example.reviewservice.RequestDTO.PassengerRequestDTO;
 import org.example.reviewservice.ResponseDTO.PassengerResponseDTO;
-import org.example.reviewservice.models.Passenger;
-import org.example.reviewservice.repositories.PassengerRepository;
+//import org.example.reviewservice.models.Passenger;
+//import org.example.reviewservice.repositories.PassengerRepository;
+import org.example.entityservices.models.Passenger;
+import org.example.entityservices.repositories.PassengerRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;

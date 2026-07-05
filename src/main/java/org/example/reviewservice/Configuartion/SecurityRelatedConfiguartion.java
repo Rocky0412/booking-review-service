@@ -3,7 +3,7 @@ package org.example.reviewservice.Configuartion;
 
 import org.example.reviewservice.Configuartion.Helper.JWTAuthFilter;
 import org.example.reviewservice.Configuartion.Helper.PassengerUserDetailsImp;
-import org.example.reviewservice.repositories.PassengerRepository;
+import org.example.entityservices.repositories.PassengerRepository;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -73,7 +73,7 @@ public class SecurityRelatedConfiguartion {
 
 
     public UserDetailsService userDetailsService() {
-        return new PassengerUserDetailsImp(passengerRepository);
+        return new PassengerUserDetailsImp((org.example.entityservices.repositories.PassengerRepository) passengerRepository);
     }
 
     @Bean

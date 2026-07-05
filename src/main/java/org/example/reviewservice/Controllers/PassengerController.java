@@ -3,11 +3,14 @@ package org.example.reviewservice.Controllers;
 import org.example.reviewservice.RequestDTO.PassengerRequestDTO;
 import org.example.reviewservice.ResponseDTO.PassengerResponseDTO;
 import org.example.reviewservice.Services.PassengerServices;
-import org.example.reviewservice.models.Passenger;
-import org.example.reviewservice.repositories.PassengerRepository;
+//import org.example.reviewservice.models.Passenger;
+//import org.example.reviewservice.repositories.PassengerRepository;
+
+import org.example.entityservices.models.Passenger;
+import org.example.entityservices.repositories.PassengerRepository;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -38,13 +41,13 @@ public class PassengerController {
         return passengerServices.getPassengerById(id);
     }
     @PostMapping("/create")
-    public ResponseEntity<Passenger> createPassenger(@RequestBody PassengerRequestDTO
+    public ResponseEntity<org.example.entityservices.models.Passenger> createPassenger(@RequestBody PassengerRequestDTO
                                                                             passengerRequestDTO) {
 
         return  passengerServices.createPassenger(passengerRequestDTO);
     }
     @DeleteMapping("/{id}")
-    public ResponseEntity<Optional<Passenger>> deletePassenger(@PathVariable Long id) {
+    public ResponseEntity<Optional<org.example.entityservices.models.Passenger>> deletePassenger(@PathVariable Long id) {
         return passengerServices.deletePassenger(id);
     }
     @PatchMapping("/{id}/email")

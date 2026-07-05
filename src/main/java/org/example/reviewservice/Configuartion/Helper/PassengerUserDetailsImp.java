@@ -1,7 +1,7 @@
 package org.example.reviewservice.Configuartion.Helper;
 
-import org.example.reviewservice.models.Passenger;
-import org.example.reviewservice.repositories.PassengerRepository;
+import org.example.entityservices.models.Passenger;
+import org.example.entityservices.repositories.PassengerRepository;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;

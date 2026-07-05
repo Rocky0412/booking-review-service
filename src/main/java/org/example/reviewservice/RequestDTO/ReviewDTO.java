@@ -1,7 +1,7 @@
 package org.example.reviewservice.RequestDTO;
 
 import lombok.*;
-import org.example.reviewservice.models.Booking;
+import org.example.entityservices.models.Booking;
 
 @Getter
 @Setter
