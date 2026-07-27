@@ -44,6 +44,7 @@ public class SecurityRelatedConfiguartion {
                 .cors(cors->cors.disable())
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/api/v1/auth/**").permitAll()
+                        .requestMatchers("/api/v1/booking/**").permitAll()
                         .requestMatchers("/api/v1/auth/validate").authenticated()
                          .anyRequest().authenticated())
 
